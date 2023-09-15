@@ -21,8 +21,7 @@ public class LSystem {
   private float moveDistance = 10;
   
   // The general angle to rotate
-  private float rotateAngleLeft = 90;
-  private float rotateAngleRight = 90;
+  private float rotateAngle = 90;
   
   // How much to scale the drawing of the l-system on each iteration
   private float scaleFactor = 1.0;
@@ -31,15 +30,13 @@ public class LSystem {
   public LSystem(String axiom, 
                  HashMap<Character, String> rules, 
                  float moveDistance,
-                 float rotateAngleLeft,
-                 float rotateAngleRight,
+                 float rotateAngle,
                  float scaleFactor){
     // Initialize variables for Lsystem
     this.axiom = axiom;
     this.rules = rules;
     this.moveDistance = moveDistance;
-    this.rotateAngleLeft = rotateAngleLeft;
-    this.rotateAngleRight = rotateAngleRight;
+    this.rotateAngle = rotateAngle;
     this.scaleFactor = scaleFactor;
     
     // Initialize current iteration (n = 0) to be the axiom
@@ -109,6 +106,9 @@ public class LSystem {
     // Get the current iteration numbers
     int iterationNum = this.getIterationNum();
     
+    // Save the turtle state when needed 
+    ArrayList<Turtle> turtleState = new ArrayList<Turtle>();
+    
     // Scale the move distance (if needed)
     float dist = this.moveDistance;
     
@@ -130,10 +130,21 @@ public class LSystem {
           t.forward(dist);
           break; // The "break" breaks out of the switch statement and prevents the next cases from running
          case '+':
-           t.left(this.rotateAngleLeft);
+           t.left(this.rotateAngle);
            break;
          case '-':
-           t.right(this.rotateAngleRight);
+           t.right(this.rotateAngle);
+           break;
+         case '[':
+           turtleState.add(new Turtle(t));
+           break;
+         case ']':
+           Turtle previousState = turtleState.get(turtleState.size()-1);
+           turtleState.remove(turtleState.size()-1);
+           t.penUp();
+           t.goToPoint(previousState.getX(), previousState.getY());
+           t.setHeading(previousState.getHeading());
+           t.penDown();
            break;
          default:
            // Throw an error if we don't have a draw operation implemented 
