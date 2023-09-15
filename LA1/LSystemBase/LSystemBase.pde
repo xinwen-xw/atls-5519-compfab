@@ -25,7 +25,7 @@ void setup() {
   t = new Turtle(this);
   
   // Initialize an LSystem using a function from ExampleLSystems
-  lSys = initDragon();
+  lSys = initSnowflake();
    
   // Don't loop the draw function
   noLoop();
@@ -66,7 +66,7 @@ void resetTurtle() {
   t.clearTurtleHistory();
   
   // You can change the start position if the image doesn't fit.
-  t.goToPoint(width/2, height-20);
+  t.goToPoint(width-200, height-100);
   t.setHeading(0);
   t.penDown();
 }

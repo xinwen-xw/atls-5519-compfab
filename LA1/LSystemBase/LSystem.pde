@@ -21,7 +21,8 @@ public class LSystem {
   private float moveDistance = 10;
   
   // The general angle to rotate
-  private float rotateAngle = 90;
+  private float rotateAngleLeft = 90;
+  private float rotateAngleRight = 90;
   
   // How much to scale the drawing of the l-system on each iteration
   private float scaleFactor = 1.0;
@@ -30,13 +31,15 @@ public class LSystem {
   public LSystem(String axiom, 
                  HashMap<Character, String> rules, 
                  float moveDistance,
-                 float rotateAngle,
+                 float rotateAngleLeft,
+                 float rotateAngleRight,
                  float scaleFactor){
     // Initialize variables for Lsystem
     this.axiom = axiom;
     this.rules = rules;
     this.moveDistance = moveDistance;
-    this.rotateAngle = rotateAngle;
+    this.rotateAngleLeft = rotateAngleLeft;
+    this.rotateAngleRight = rotateAngleRight;
     this.scaleFactor = scaleFactor;
     
     // Initialize current iteration (n = 0) to be the axiom
@@ -127,10 +130,10 @@ public class LSystem {
           t.forward(dist);
           break; // The "break" breaks out of the switch statement and prevents the next cases from running
          case '+':
-           t.left(this.rotateAngle);
+           t.left(this.rotateAngleLeft);
            break;
          case '-':
-           t.right(this.rotateAngle);
+           t.right(this.rotateAngleRight);
            break;
          default:
            // Throw an error if we don't have a draw operation implemented 

@@ -18,7 +18,7 @@ LSystem initSquare() {
   rules.put('F', "F+F-F-FF+F+F-F");
     
   // Create the Lsystem
-  return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);
+  return new LSystem(axiom, rules, moveDist, rotateAngle, rotateAngle, scaleFactor);
 }
 
 LSystem initDragon() {
@@ -36,5 +36,23 @@ LSystem initDragon() {
   rules.put('G', "F-G");
   
   // Create the Lsystem
-  return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);
+  return new LSystem(axiom, rules, moveDist, rotateAngle, rotateAngle, scaleFactor);
+}
+
+LSystem initSnowflake() {
+  // initialize turtle variables
+  float moveDist = 10;
+  float rotateAngleLeft = 120;
+  float rotateAngleRight = 60;
+  float scaleFactor = 2;
+  
+  // The intial axiom / input string
+  String axiom = "F+F+F";
+  
+  // Create any production rules
+  HashMap<Character, String> rules = new HashMap<>();
+  rules.put('F', "F-F+F-F");
+  
+  // Create the Lsystem
+  return new LSystem(axiom, rules, moveDist, rotateAngleLeft, rotateAngleRight, scaleFactor);
 }
