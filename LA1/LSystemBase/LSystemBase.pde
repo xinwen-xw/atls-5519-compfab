@@ -25,7 +25,7 @@ void setup() {
   t = new Turtle(this);
   
   // Initialize an LSystem using a function from ExampleLSystems
-  lSys = initSnowflake();
+  lSys = initInflorescences();
    
   // Don't loop the draw function
   noLoop();

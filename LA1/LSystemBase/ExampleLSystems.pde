@@ -14,8 +14,10 @@ LSystem initSquare() {
   String axiom = "F+F+F+F";
   
   // Create any production rules
-  HashMap<Character, String> rules = new HashMap<>();
-  rules.put('F', "F+F-F-FF+F+F-F");
+  HashMap<Character, HashMap<String, String>> rules = new HashMap<>();
+  HashMap<String, String> F_rules = new HashMap<>();
+  F_rules.put("default", "F+F-F-FF+F+F-F");
+  rules.put('F', F_rules);
     
   // Create the Lsystem
   return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);
@@ -31,9 +33,13 @@ LSystem initDragon() {
   String axiom = "F";
   
   // Create any production rules
-  HashMap<Character, String> rules = new HashMap<>();
-  rules.put('F', "F+G");
-  rules.put('G', "F-G");
+  HashMap<Character, HashMap<String, String>> rules = new HashMap<>();
+  HashMap<String, String> F_rules = new HashMap<>();
+  F_rules.put("default", "F+G");
+  HashMap<String, String> G_rules = new HashMap<>();
+  G_rules.put("default", "F-G");
+  rules.put('F', F_rules);
+  rules.put('G', G_rules);
   
   // Create the Lsystem
   return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);
@@ -49,9 +55,11 @@ LSystem initSnowflake() {
   // The intial axiom / input string
   String axiom = "F++F++F";
   
-  // Create any production rules
-  HashMap<Character, String> rules = new HashMap<>();
-  rules.put('F', "F-F++F-F");
+  // Create any production rules  
+  HashMap<Character, HashMap<String, String>> rules = new HashMap<>();
+  HashMap<String, String> F_rules = new HashMap<>();
+  F_rules.put("default", "F-F++F-F");
+  rules.put('F', F_rules);
   
   // Create the Lsystem
   return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);
@@ -66,10 +74,37 @@ LSystem initTree() {
   // The intial axiom / input string
   String axiom = "G";
   
+  // Create any production rules  
+  HashMap<Character, HashMap<String, String>> rules = new HashMap<>();
+  HashMap<String, String> F_rules = new HashMap<>();
+  F_rules.put("default", "FF");
+  HashMap<String, String> G_rules = new HashMap<>();
+  G_rules.put("default", "F[+G]F[-G]+G");  
+  rules.put('G', G_rules);
+  rules.put('F', F_rules);
+  
+  // Create the Lsystem
+  return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);
+}
+
+LSystem initInflorescences() {
+  // initialize turtle variables
+  float moveDist = 40;
+  float rotateAngle = 30;
+  float scaleFactor = 1;
+  
+  // The intial axiom / input string
+  String axiom = "a";
+  
   // Create any production rules
-  HashMap<Character, String> rules = new HashMap<>();
-  rules.put('G', "F[+G]F[-G]+G");
-  rules.put('F', "FF");
+  HashMap<Character, HashMap<String, String>> rules = new HashMap<>();
+  HashMap<String, String> vegetative_apex_rules = new HashMap<>();
+  vegetative_apex_rules.put("init", "I[L]a");
+  vegetative_apex_rules.put("growth", "I[L]A");
+  rules.put('a', vegetative_apex_rules);
+  HashMap<String, String> flowering_apex_rules = new HashMap<>();
+  flowering_apex_rules.put("default", "I[K]A");
+  rules.put('A', flowering_apex_rules);
   
   // Create the Lsystem
   return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);

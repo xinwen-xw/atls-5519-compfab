@@ -10,7 +10,7 @@ public class LSystem {
   
   // Member Variables for an Instance of this object 
   private String axiom;
-  private HashMap<Character, String> rules;
+  private HashMap<Character, HashMap<String, String>> rules;
   
   private int iterationNum = 0;
   
@@ -28,7 +28,7 @@ public class LSystem {
 
   // Constructor for making an Lsystem object with input parameters 
   public LSystem(String axiom, 
-                 HashMap<Character, String> rules, 
+                 HashMap<Character, HashMap<String, String>> rules, 
                  float moveDistance,
                  float rotateAngle,
                  float scaleFactor){
@@ -90,7 +90,15 @@ public class LSystem {
     for (int i = 0; i < current.length(); i++) {
       Character c = current.charAt(i);
       if (rules.containsKey(c)) {
-        currentIterationBuffer.append(rules.get(c));
+        if (c == 'a') {
+          if (iterationNum < 2) {
+            currentIterationBuffer.append(rules.get(c).get("init"));
+          } else {
+            currentIterationBuffer.append(rules.get(c).get("growth"));
+          }
+        } else {
+          currentIterationBuffer.append(rules.get(c).get("default"));
+        }
       } else {
         currentIterationBuffer.append(c);
       }
@@ -105,10 +113,7 @@ public class LSystem {
   public void drawLSystem(Turtle t) {
     // Get the current iteration numbers
     int iterationNum = this.getIterationNum();
-    
-    // Save the turtle state when needed 
-    ArrayList<Turtle> turtleState = new ArrayList<Turtle>();
-    
+        
     // Scale the move distance (if needed)
     float dist = this.moveDistance;
     
@@ -119,6 +124,11 @@ public class LSystem {
 
     // Get the current iteration string
     String currentIteration = this.getIterationString(); 
+    
+    // record the previous direction for operations that needs to switch direction 
+    // e.g. growth direction of a leave or flower 
+    // where 0 is left and 1 is right
+    int direction = 0;
     
     // Loop through each character in the iteration string,
     // and do turtle operations
@@ -135,16 +145,45 @@ public class LSystem {
          case '-':
            t.right(this.rotateAngle);
            break;
-         case '[':
-           turtleState.add(new Turtle(t));
+         case '[': // save the current state of the turtle
+           t.push();
            break;
-         case ']':
-           Turtle previousState = turtleState.get(turtleState.size()-1);
-           turtleState.remove(turtleState.size()-1);
-           t.penUp();
-           t.goToPoint(previousState.getX(), previousState.getY());
-           t.setHeading(previousState.getHeading());
-           t.penDown();
+         case ']': // jump back to previously saved state of the turtle 
+           t.pop();
+           break;
+         case 'a':
+           break;
+         case 'A':
+           t.forward(dist);
+           circle(t.getX(), t.getY(), dist/6);
+           break;
+         case 'I':
+           t.forward(dist);
+           break;
+         case 'L': // drawing a leaf
+           for (int j = 0; j < 4; j++) {
+             // this part ensures that a leaf will grow in alternating direction 
+             if ((direction % 2) == 0) {
+               t.left(this.rotateAngle);
+             } else {
+               t.right(this.rotateAngle);
+             }
+             t.forward(dist/4);
+           }
+           direction = (direction + 1) % 2;            
+           break;
+         case 'K': // drawing a flower
+         // this part ensures that a flower will grow in alternating direction 
+           if ((direction % 2) == 0) {
+             t.left(this.rotateAngle);
+           } else {
+             t.right(this.rotateAngle);
+           }
+           direction = (direction + 1) % 2;
+           
+           t.forward(dist);
+           fill(0);
+           circle(t.getX(), t.getY(), dist/3);
            break;
          default:
            // Throw an error if we don't have a draw operation implemented 
