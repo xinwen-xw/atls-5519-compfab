@@ -1,12 +1,7 @@
-// This is an implementation of an L-System
-// Assumes all input vocabulary not given a rule are constants. 
-// Though you could give an explicit rule for a constant using "F" --> "F"
-// It uses StringBuffer to handle replacing characters in production rules
-// in order to avoid wasteful creation of strings and memory problems
-// original @author: @mriveralee
+// This is an implementation of a prob L-System
 import java.util.HashMap;
 
-public class LSystem {
+public class ProbabilisticLSystem {
   
   // Member Variables for an Instance of this object 
   private String axiom;
@@ -27,7 +22,7 @@ public class LSystem {
   private float scaleFactor = 1.0;
 
   // Constructor for making an Lsystem object with input parameters 
-  public LSystem(String axiom, 
+  public ProbabilisticLSystem(String axiom, 
                  HashMap<Character, String[]> rules, 
                  float moveDistance,
                  float rotateAngle,
@@ -90,13 +85,20 @@ public class LSystem {
     for (int i = 0; i < current.length(); i++) {
       Character c = current.charAt(i);
       if (rules.containsKey(c)) {
-        if (c == 'a') {
+        if (c == 'a') { // delay mechanism 
           if (iterationNum < 1) {
             currentIterationBuffer.append(rules.get(c)[0]);
           } else {
             currentIterationBuffer.append(rules.get(c)[1]);
           }
-        } else {
+        } else if (c == 'G') { // stochastic mechanism
+           if (random(1) < 0.7) {
+             currentIterationBuffer.append(rules.get(c)[0]);
+           } else {
+             currentIterationBuffer.append(rules.get(c)[1]);
+           }
+        }
+          else {
           currentIterationBuffer.append(rules.get(c)[0]);
         }
       } else {
@@ -144,6 +146,15 @@ public class LSystem {
            break;
          case '-':
            t.right(this.rotateAngle);
+           break;
+         case 'f':
+           t.forward(random(dist));
+           break;           
+         case 'l':
+           t.left(random(this.rotateAngle));
+           break;
+         case 'r':
+           t.right(random(this.rotateAngle));
            break;
          case '[': // save the current state of the turtle
            t.push();

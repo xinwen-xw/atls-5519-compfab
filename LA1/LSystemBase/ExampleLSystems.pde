@@ -14,9 +14,8 @@ LSystem initSquare() {
   String axiom = "F+F+F+F";
   
   // Create any production rules
-  HashMap<Character, HashMap<String, String>> rules = new HashMap<>();
-  HashMap<String, String> F_rules = new HashMap<>();
-  F_rules.put("default", "F+F-F-FF+F+F-F");
+  HashMap<Character, String[]> rules = new HashMap<>();
+  String[] F_rules = {"F+F-F-FF+F+F-F"};
   rules.put('F', F_rules);
     
   // Create the Lsystem
@@ -33,11 +32,9 @@ LSystem initDragon() {
   String axiom = "F";
   
   // Create any production rules
-  HashMap<Character, HashMap<String, String>> rules = new HashMap<>();
-  HashMap<String, String> F_rules = new HashMap<>();
-  F_rules.put("default", "F+G");
-  HashMap<String, String> G_rules = new HashMap<>();
-  G_rules.put("default", "F-G");
+  HashMap<Character, String[]> rules = new HashMap<>();  
+  String[] F_rules = {"F+G"};
+  String[] G_rules = {"default", "F-G"};
   rules.put('F', F_rules);
   rules.put('G', G_rules);
   
@@ -56,9 +53,8 @@ LSystem initSnowflake() {
   String axiom = "F++F++F";
   
   // Create any production rules  
-  HashMap<Character, HashMap<String, String>> rules = new HashMap<>();
-  HashMap<String, String> F_rules = new HashMap<>();
-  F_rules.put("default", "F-F++F-F");
+  HashMap<Character, String[]> rules = new HashMap<>();  
+  String[] F_rules = {"F-F++F-F"};
   rules.put('F', F_rules);
   
   // Create the Lsystem
@@ -75,11 +71,9 @@ LSystem initTree() {
   String axiom = "G";
   
   // Create any production rules  
-  HashMap<Character, HashMap<String, String>> rules = new HashMap<>();
-  HashMap<String, String> F_rules = new HashMap<>();
-  F_rules.put("default", "FF");
-  HashMap<String, String> G_rules = new HashMap<>();
-  G_rules.put("default", "F[+G]F[-G]+G");  
+  HashMap<Character, String[]> rules = new HashMap<>();  
+  String[] F_rules =  {"FF"};
+  String[] G_rules = {"F[+G]F[-G]+G"};  
   rules.put('G', G_rules);
   rules.put('F', F_rules);
   
@@ -97,13 +91,10 @@ LSystem initInflorescences() {
   String axiom = "a";
   
   // Create any production rules
-  HashMap<Character, HashMap<String, String>> rules = new HashMap<>();
-  HashMap<String, String> vegetative_apex_rules = new HashMap<>();
-  vegetative_apex_rules.put("init", "I[L]a");
-  vegetative_apex_rules.put("growth", "I[L]A");
+  HashMap<Character, String[]> rules = new HashMap<>();  
+  String[] vegetative_apex_rules = {"I[L]a", "I[L]A"};
   rules.put('a', vegetative_apex_rules);
-  HashMap<String, String> flowering_apex_rules = new HashMap<>();
-  flowering_apex_rules.put("default", "I[K]A");
+  String[] flowering_apex_rules = {"I[K]A"};
   rules.put('A', flowering_apex_rules);
   
   // Create the Lsystem

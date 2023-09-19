@@ -1,4 +1,4 @@
-// Modified from the LA1 - LSystem Base code (@author: @mriveralee)
+// Modified from the LA1 - LSystem Base code (original @author: @mriveralee)
 // Note: This sketch uses the Turtle library which can be downloaded from
 // https://github.com/leahbuechley/Turtle
 import processing.svg.*;
@@ -10,7 +10,8 @@ import Turtle.*;
 int numIterations = 0; 
 
 // L-system
-LSystem lSys;
+//LSystem lSys;
+ProbabilisticLSystem lSys;
 
 // The Turtle
 Turtle t;
@@ -25,7 +26,7 @@ void setup() {
   t = new Turtle(this);
   
   // Initialize an LSystem using a function from ExampleLSystems
-  lSys = initInflorescences();
+  lSys = initProbTree();
    
   // Don't loop the draw function
   noLoop();
@@ -66,7 +67,7 @@ void resetTurtle() {
   t.clearTurtleHistory();
   
   // You can change the start position if the image doesn't fit.
-  t.goToPoint(width-200, height-100);
+  t.goToPoint(width/2, height-100);
   t.setHeading(0);
   t.penDown();
 }
@@ -106,7 +107,6 @@ void printInstructions() {
   println("Press 'n' to decrement the L-system iterations.");
   println("Press 's' to save an SVG.");
   println("=======================================");
-
 }
 
 
