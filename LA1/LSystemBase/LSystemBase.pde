@@ -10,8 +10,8 @@ import Turtle.*;
 int numIterations = 0; 
 
 // L-system
-//LSystem lSys;
-ProbabilisticLSystem lSys;
+LSystem lSys;
+//ProbabilisticLSystem lSys;
 
 // The Turtle
 Turtle t;
@@ -21,12 +21,14 @@ void setup() {
   size(700, 700);
   background(255);
   stroke(0);
+  strokeWeight(5);
+  noFill();
   
   // Create the turtle
   t = new Turtle(this);
   
   // Initialize an LSystem using a function from ExampleLSystems
-  lSys = initProbTree();
+  lSys = initUmbel();
    
   // Don't loop the draw function
   noLoop();

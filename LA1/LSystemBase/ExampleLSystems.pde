@@ -100,3 +100,64 @@ LSystem initInflorescences() {
   // Create the Lsystem
   return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);
 }
+
+LSystem initPanicle() {
+  // initialize turtle variables
+  float moveDist = 40;
+  float rotateAngle = 30;
+  float scaleFactor = 1;
+  
+  // The intial axiom / input string
+  String axiom = "a";
+  
+  // Create any production rules
+  HashMap<Character, String[]> rules = new HashMap<>();  
+  String[] vegetative_apex_rules = {"I[M]a", "I[M]J"};
+  rules.put('a', vegetative_apex_rules);
+  String[] flowering_apex_rules = {"I[M]I[+J]J"};
+  rules.put('J', flowering_apex_rules);
+
+  
+  // Create the Lsystem
+  return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);
+}
+
+LSystem initSingleFlowerShoot() {
+  // initialize turtle variables
+  float moveDist = 40;
+  float rotateAngle = 30;
+  float scaleFactor = 1;
+  
+  // The intial axiom / input string
+  String axiom = "a";
+  
+  // Create any production rules
+  HashMap<Character, String[]> rules = new HashMap<>();  
+  String[] vegetative_apex_rules = {"I[S]a", "I[S]A"};
+  rules.put('a', vegetative_apex_rules);
+  String[] flowering_apex_rules = {"T"};
+  rules.put('A', flowering_apex_rules);
+  
+  // Create the Lsystem
+  return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);
+}
+
+
+LSystem initUmbel(){
+  // initialize turtle variables
+  float moveDist = 100;
+  float rotateAngle = 40;
+  float scaleFactor = 1;
+  
+  // The intial axiom / input string
+  String axiom = "IB";
+  
+  // Create any production rules
+  HashMap<Character, String[]> rules = new HashMap<>();
+  String[] B_rules = {"I[++B][+B][B][-B][--B]"};
+  rules.put('B', B_rules);
+
+
+  // Create the Lsystem
+  return new LSystem(axiom, rules, moveDist, rotateAngle, scaleFactor);
+}

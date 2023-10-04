@@ -5,6 +5,8 @@
 // in order to avoid wasteful creation of strings and memory problems
 // original @author: @mriveralee
 import java.util.HashMap;
+import java.lang.Math;
+
 
 public class LSystem {
   
@@ -91,14 +93,20 @@ public class LSystem {
       Character c = current.charAt(i);
       if (rules.containsKey(c)) {
         if (c == 'a') {
-          if (iterationNum < 1) {
+          if (iterationNum < 2) {
+            currentIterationBuffer.append(rules.get(c)[0]);
+          } else {
+            currentIterationBuffer.append(rules.get(c)[1]);
+          }
+        } else if (c == 'A' & rules.get(c).length > 1) {
+          if (iterationNum < 6) {
             currentIterationBuffer.append(rules.get(c)[0]);
           } else {
             currentIterationBuffer.append(rules.get(c)[1]);
           }
         } else {
           currentIterationBuffer.append(rules.get(c)[0]);
-        }
+        } 
       } else {
         currentIterationBuffer.append(c);
       }
@@ -130,12 +138,16 @@ public class LSystem {
     // where 0 is left and 1 is right
     int direction = 0;
     
+    // number of bracket 
+    int b = 0;
     // Loop through each character in the iteration string,
     // and do turtle operations
     for (int i = 0; i < currentIteration.length(); i++) {
       Character c = currentIteration.charAt(i); 
       switch (c) {
         case 'F':
+          t.forward(dist);
+          break;
         case 'G':
           t.forward(dist);
           break; // The "break" breaks out of the switch statement and prevents the next cases from running
@@ -147,33 +159,35 @@ public class LSystem {
            break;
          case '[': // save the current state of the turtle
            t.push();
+           b += 1;
            break;
          case ']': // jump back to previously saved state of the turtle 
            t.pop();
+           b -= 1;
            break;
          case 'a':
            break;
-         case 'A':
-           t.forward(dist);
-           circle(t.getX(), t.getY(), dist/6);
+         case 'A': // draw a simple circle flowering apex
+           t.forward(dist*1.5);
+           circle(t.getX(), t.getY(), dist/3);
            break;
          case 'I':
            t.forward(dist);
            break;
-         case 'L': // drawing a leaf
-           for (int j = 0; j < 4; j++) {
-             // this part ensures that a leaf will grow in alternating direction 
-             if ((direction % 2) == 0) {
-               t.left(this.rotateAngle);
-             } else {
-               t.right(this.rotateAngle);
-             }
-             t.forward(dist/4);
-           }
+         case 'B':
+           float ratio = (float)Math.pow(0.5, b);
+           t.forward(dist*ratio);
+           circle(t.getX(), t.getY(), dist/8);
+           break;
+         case 'L': // draw a leaf growing in alternating direction
+           drawSlantedAlternatingLeaf(t, direction, this.rotateAngle, dist);
+           // flip direction so the next leaf will grow in the other direction 
            direction = (direction + 1) % 2;            
            break;
-         case 'K': // drawing a flower
-         // this part ensures that a flower will grow in alternating direction 
+         case 'S': // draw a set of leaf growing sideways 
+           drawSideGrowingLeaf(t, dist);
+           break;
+         case 'K': // draw a simple circle flower that grows in alternating direction 
            if ((direction % 2) == 0) {
              t.left(this.rotateAngle);
            } else {
@@ -182,8 +196,38 @@ public class LSystem {
            direction = (direction + 1) % 2;
            
            t.forward(dist);
-           fill(0);
-           circle(t.getX(), t.getY(), dist/3);
+           circle(t.getX(), t.getY(), dist/2.5);
+           break;
+         case 'J':
+           t.forward(dist);
+           circle(t.getX(), t.getY(), dist/2.5);
+           break;
+         case 'M': 
+           if ((direction % 2) == 0) {
+             for (int j=0; j<5; j++) {
+               t.forward(dist/5);
+               t.left(this.rotateAngle/2);
+             }
+           } else {
+             for (int j=0; j<5; j++) {
+               t.forward(dist/5);
+               t.right(this.rotateAngle/2);
+             }
+           }
+           direction = (direction + 1) % 2;   
+           break;
+         case 'T': // draw a five-petal flower 
+           t.forward(dist);
+           t.penUp();
+           t.forward(dist);
+           t.penDown();
+           for (int j=0; j<6; j++) {
+             for (int k=0; k<12; k++) {
+               t.forward(dist/4);
+               t.left(360/12);
+             }
+             t.left(360/6);
+           }
            break;
          default:
            // Throw an error if we don't have a draw operation implemented 
@@ -191,4 +235,37 @@ public class LSystem {
        }
     }
   }
+}
+
+void drawSlantedAlternatingLeaf(Turtle t, int direction, float rotateAngle, float dist) {
+  // this part ensures that a leaf will grow in alternating direction 
+   if ((direction % 2) == 0) {
+     t.left(rotateAngle);
+     t.forward(dist);
+     pushMatrix();
+     translate(t.getX(), t.getY());
+     rotate(rotateAngle * PI / 90 );
+     ellipse(0, 0, dist, 15);
+     popMatrix();
+   } else {
+     t.right(rotateAngle);
+     t.forward(dist);
+     pushMatrix();
+     translate(t.getX(), t.getY());
+     rotate(-1 * rotateAngle * PI / 90 );
+     ellipse(0, 0, dist, 15);
+     popMatrix();
+  }
+}
+
+void drawSideGrowingLeaf(Turtle t, float dist) {
+  pushMatrix();
+  translate(t.getX()-dist/2, t.getY());
+  ellipse(0, 0, dist, 15);
+  popMatrix();
+  
+  pushMatrix();
+  translate(t.getX()+dist/2, t.getY());
+  ellipse(0, 0, dist, 15);
+  popMatrix();
 }
